@@ -3,11 +3,13 @@
 
 #include <Arduino.h>
 
-#define FIRMWARE_VERSION "0.10.1"
+#define FIRMWARE_VERSION "0.10.2"
   
 
 /*
 Версии прошивки для ESP
+
+0.10.2 - 2021.02.30 - Обновлены сертификаты Lets Encrypt
 
 0.10.1 - 2021.02.08 - Добавлена настройка веса импульса для горячего
                       и холодного счетчика. Добавлена настройка периода
@@ -58,7 +60,7 @@
 /* 
     Уровень логирования
 */
-#define LOGLEVEL 3
+#define LOGLEVEL 2
 //#define DEBUG_ESP_HTTP_CLIENT
 //#define DEBUG_ESP_PORT Serial
 
@@ -93,7 +95,7 @@
 #define MQTT_PASSWORD_LEN 32
 #define MQTT_TOPIC_LEN 64
 
-#define DEFAULT_TRANSMIT_PERIOD 1440
+#define DEFAULT_WAKEUP_PERIOD_MIN 1440
 
 #define AUTO_IMPULSE_FACTOR 2
 #define AS_COLD_CHANNEL     7
@@ -193,8 +195,12 @@ struct Settings
     uint32_t ip;
     uint32_t gateway;
     uint32_t mask;
-
+    
+    /*
+    Период пробуждение для отправки данных, мин
+    */
     uint16_t wakeup_per_min;
+    
     /*
     Зарезервируем кучу места, чтобы не писать конвертер конфигураций.
     Будет актуально для On-the-Air обновлений
